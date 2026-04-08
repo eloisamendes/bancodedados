@@ -5,13 +5,13 @@
  ## Lista de exercicios 
 
  Modelo imobiliaria:
----
+
  Modelo escola conceitual:
  Modelo escola lógico:
----
+
  Modelo filme conceitual: 
  Modelo filme lógico:
----
+
  Modelo clinica veterinaria conceitual:
  Modelo clinica vetrinaria lógico:
- ---
+ 
