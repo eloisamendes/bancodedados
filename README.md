@@ -2,16 +2,18 @@
 
  Repositório destinado ao armazenamneto e organização de projetos realizados em aulas de Banco de dados 2026.
 
- ## Lista de exercicios 
+ ## Lista de Exercícios
 
- Modelo imobiliaria:
+**Modelo imobiliária:** <br>
 
- Modelo escola conceitual:
- Modelo escola lógico:
+**Modelo escola:** <br>
+* Conceitual <br>
+* Lógico <br>
 
- Modelo filme conceitual: 
- Modelo filme lógico:
+**Modelo filme:** <br>
+* Conceitual <br>
+* Lógico <br>
 
- Modelo clinica veterinaria conceitual:
- Modelo clinica vetrinaria lógico:
- 
+**Modelo clínica veterinária:** <br>
+* Conceitual <br>
+* Lógico <br>
