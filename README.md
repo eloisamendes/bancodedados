@@ -7,13 +7,13 @@
 **Modelo imobiliária:** <br> https://app.brmodeloweb.com/#!/publicview/69dc5c93de5a39cbdf6ed7fe
 
 **Modelo escola:** <br>
-* Conceitual <br>
-* Lógico <br>
+* Conceitual <br> https://app.brmodeloweb.com/#!/publicview/69dc5d46de5a39cbdf6ed81e
+* Lógico <br> https://app.brmodeloweb.com/#!/publicview/69dc5d7dde5a39cbdf6ed826
 
 **Modelo filme:** <br>
-* Conceitual <br>
-* Lógico <br>
+* Conceitual <br> https://app.brmodeloweb.com/#!/publicview/69dc5d8fde5a39cbdf6ed82c
+* Lógico <br> https://app.brmodeloweb.com/#!/publicview/69dc5da5de5a39cbdf6ed834
 
 **Modelo clínica veterinária:** <br>
-* Conceitual <br>
-* Lógico <br>
+* Conceitual <br> https://app.brmodeloweb.com/#!/publicview/69d5db99de33eeb5ddb54468
+* Lógico <br> https://app.brmodeloweb.com/#!/publicview/69dc5ddfde5a39cbdf6ed845
