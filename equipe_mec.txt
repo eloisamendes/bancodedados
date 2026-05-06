@@ -45,7 +45,7 @@ CREATE TABLE ordem_servico
 ( 
  id_ordem INT PRIMARY KEY AUTO_INCREMENT,
  placa VARCHAR(10) NOT NULL,  
- cpf VARCHAR(20) NOT NULL,  
+ cpf VARCHAR(11) NOT NULL,  
  status VARCHAR(50) NOT NULL,  
  dataentrada DATE NOT NULL,  
  problema VARCHAR(255) NOT NULL,  
