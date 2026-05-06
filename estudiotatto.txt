@@ -1,16 +1,16 @@
 CREATE TABLE senioridade 
 ( 
  cod_senioridade INT PRIMARY KEY AUTO_INCREMENT,  
- nome VARCHAR(50) NOT NULL
+ nome VARCHAR(150) NOT NULL
 ); 
 
 CREATE TABLE Tatuador 
 ( 
  id_tatuador INT PRIMARY KEY AUTO_INCREMENT,
- email VARCHAR(100) UNIQUE NOT NULL,  
- telefone VARCHAR(20),  
- nometatuador VARCHAR(100) NOT NULL,  
- cpf VARCHAR(20) UNIQUE NOT NULL,  
+ email VARCHAR(150) UNIQUE NOT NULL,  
+ telefone VARCHAR(15),  
+ nometatuador VARCHAR(150) NOT NULL,  
+ cpf VARCHAR(11) UNIQUE NOT NULL,  
  datacontratacao DATE NOT NULL,  
  idsenioridade INT NOT NULL,
  FOREIGN KEY (idsenioridade) REFERENCES senioridade(cod_senioridade)
@@ -25,8 +25,8 @@ CREATE TABLE Estilo
 CREATE TABLE Cliente 
 ( 
  id_cliente INT PRIMARY KEY AUTO_INCREMENT,  
- telefone VARCHAR(20),  
- nome VARCHAR(100) NOT NULL,  
+ telefone VARCHAR(15),  
+ nome VARCHAR(150) NOT NULL,  
  cpf VARCHAR(20) UNIQUE NOT NULL,  
  datacadastro DATE NOT NULL,  
  cidade VARCHAR(100) NOT NULL,  
@@ -36,7 +36,7 @@ CREATE TABLE Cliente
 CREATE TABLE Agendamento 
 ( 
  id_agendamento INT PRIMARY KEY AUTO_INCREMENT,  
- desenho_aprovado BIT NOT NULL,  
+ desenho_aprovado VARCHAR(20) NOT NULL,  
  hora_agendamento TIME NOT NULL,  
  data_agendamento DATE NOT NULL,  
  valor DECIMAL(10,2),  
