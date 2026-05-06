@@ -48,7 +48,7 @@ CREATE TABLE Agendamento
  FOREIGN KEY (idCliente) REFERENCES Cliente(id_cliente)
 ); 
 
-CREATE TABLE tem 
+CREATE TABLE estilo tatuador
 ( 
  id_tatuador INT,  
  id_estilo INT,  
