@@ -1,0 +1,161 @@
+Microsoft Windows [versão 6.3.9600]
+(c) 2013 Microsoft Corporation. Todos os direitos reservados.
+
+C:\Users\ETEC>cd C:\xampp\mysql\bin
+
+C:\xampp\mysql\bin>mysql -u root
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 22
+Server version: 10.4.24-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> create database jornal;
+Query OK, 1 row affected (0.009 sec)
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| jornal             |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+6 rows in set (0.001 sec)
+
+MariaDB [(none)]> use jornal
+Database changed
+MariaDB [jornal]> create table categoria(
+    -> idcategoria int primary key auto_increment,
+    -> categoria varchar(30));
+Query OK, 0 rows affected (0.167 sec)
+
+MariaDB [jornal]> describe categorias;
+ERROR 1146 (42S02): Table 'jornal.categorias' doesn't exist
+MariaDB [jornal]> describe categoria;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| idcategoria | int(11)     | NO   | PRI | NULL    | auto_increment |
+| categoria   | varchar(30) | YES  |     | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+2 rows in set (0.032 sec)
+
+MariaDB [jornal]> rename table categoris to categorias;
+ERROR 1146 (42S02): Table 'jornal.categoris' doesn't exist
+MariaDB [jornal]> rename table categoria to categorias;
+Query OK, 0 rows affected (0.089 sec)
+
+MariaDB [jornal]> show tables;
++------------------+
+| Tables_in_jornal |
++------------------+
+| categorias       |
++------------------+
+1 row in set (0.000 sec)
+
+MariaDB [jornal]> alter table categorias change column categoria nomeCategoria v
+archar(30) not null;
+Query OK, 0 rows affected (0.296 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [jornal]> describe categorias;
++---------------+-------------+------+-----+---------+----------------+
+| Field         | Type        | Null | Key | Default | Extra          |
++---------------+-------------+------+-----+---------+----------------+
+| idcategoria   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nomeCategoria | varchar(30) | NO   |     | NULL    |                |
++---------------+-------------+------+-----+---------+----------------+
+2 rows in set (0.031 sec)
+
+MariaDB [jornal]> alter table categoriad add column teste varchar (10);
+ERROR 1146 (42S02): Table 'jornal.categoriad' doesn't exist
+MariaDB [jornal]> alter table categorias add column teste varchar (10);
+Query OK, 0 rows affected (0.071 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [jornal]> alter table categorias drop column teste;
+Query OK, 0 rows affected (0.036 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [jornal]> create table redator(
+    -> codRedator int auto_increment primary key,
+    -> nome vachar(100),
+    -> dataNascimento date,
+    -> email varchar(50) unique,
+    -> telefone varchar(15),
+    -> cpf varchar(16) (unique);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MariaDB server version for the right syntax to use near '(10
+0),
+dataNascimento date,
+email varchar(50) unique,
+telefone varchar(15),
+c...' at line 3
+MariaDB [jornal]> create table redator(
+    ->     codRedator int auto_increment primary key,
+    ->     nome varchar(100),
+    ->     dataNascimento date,
+    ->     email varchar(50) unique,
+    ->     telefone varchar(15),
+    ->     cpf varchar(16) unique
+    -> );
+Query OK, 0 rows affected (0.179 sec)
+
+MariaDB [jornal]> decsribe readator;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MariaDB server version for the right syntax to use near 'dec
+sribe readator' at line 1
+MariaDB [jornal]> describe redator;
++----------------+--------------+------+-----+---------+----------------+
+| Field          | Type         | Null | Key | Default | Extra          |
++----------------+--------------+------+-----+---------+----------------+
+| codRedator     | int(11)      | NO   | PRI | NULL    | auto_increment |
+| nome           | varchar(100) | YES  |     | NULL    |                |
+| dataNascimento | date         | YES  |     | NULL    |                |
+| email          | varchar(50)  | YES  | UNI | NULL    |                |
+| telefone       | varchar(15)  | YES  |     | NULL    |                |
+| cpf            | varchar(16)  | YES  | UNI | NULL    |                |
++----------------+--------------+------+-----+---------+----------------+
+6 rows in set (0.056 sec)
+
+MariaDB [jornal]> create table noticias(
+    -> idNoticias int auto_increment primary key,
+    -> titulonoticia varchar(255),
+    -> descricao varchar(255),
+    -> data date,
+    -> redator int,
+    -> categoria int,
+    -> foreign key (redator) references redator(codRedator),
+    -> foreign key (categoria) references categorias(idcategoria));
+Query OK, 0 rows affected (0.174 sec)
+
+MariaDB [jornal]> describe noticias;
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| idNoticias    | int(11)      | NO   | PRI | NULL    | auto_increment |
+| titulonoticia | varchar(255) | YES  |     | NULL    |                |
+| descricao     | varchar(255) | YES  |     | NULL    |                |
+| data          | date         | YES  |     | NULL    |                |
+| redator       | int(11)      | YES  | MUL | NULL    |                |
+| categoria     | int(11)      | YES  | MUL | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+6 rows in set (0.031 sec)
+
+MariaDB [jornal]> show tables;
++------------------+
+| Tables_in_jornal |
++------------------+
+| categorias       |
+| noticias         |
+| redator          |
++------------------+
+3 rows in set (0.001 sec)
+
+MariaDB [jornal]>
