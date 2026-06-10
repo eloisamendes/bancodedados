@@ -1,0 +1,129 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Tempo de geração: 10-Jun-2026 às 22:14
+-- Versão do servidor: 10.4.24-MariaDB
+-- versão do PHP: 7.4.29
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Banco de dados: `jornal`
+--
+CREATE DATABASE IF NOT EXISTS `jornal` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `jornal`;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `categorias`
+--
+
+CREATE TABLE `categorias` (
+  `idcategoria` int(11) NOT NULL,
+  `nomeCategoria` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `noticias`
+--
+
+CREATE TABLE `noticias` (
+  `idNoticias` int(11) NOT NULL,
+  `titulonoticia` varchar(255) DEFAULT NULL,
+  `descricao` varchar(255) DEFAULT NULL,
+  `data` date DEFAULT NULL,
+  `redator` int(11) DEFAULT NULL,
+  `categoria` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `redator`
+--
+
+CREATE TABLE `redator` (
+  `codRedator` int(11) NOT NULL,
+  `nome` varchar(100) DEFAULT NULL,
+  `dataNascimento` date DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `telefone` varchar(15) DEFAULT NULL,
+  `cpf` varchar(16) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Índices para tabelas despejadas
+--
+
+--
+-- Índices para tabela `categorias`
+--
+ALTER TABLE `categorias`
+  ADD PRIMARY KEY (`idcategoria`);
+
+--
+-- Índices para tabela `noticias`
+--
+ALTER TABLE `noticias`
+  ADD PRIMARY KEY (`idNoticias`),
+  ADD KEY `redator` (`redator`),
+  ADD KEY `categoria` (`categoria`);
+
+--
+-- Índices para tabela `redator`
+--
+ALTER TABLE `redator`
+  ADD PRIMARY KEY (`codRedator`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `cpf` (`cpf`);
+
+--
+-- AUTO_INCREMENT de tabelas despejadas
+--
+
+--
+-- AUTO_INCREMENT de tabela `categorias`
+--
+ALTER TABLE `categorias`
+  MODIFY `idcategoria` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `noticias`
+--
+ALTER TABLE `noticias`
+  MODIFY `idNoticias` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `redator`
+--
+ALTER TABLE `redator`
+  MODIFY `codRedator` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Restrições para despejos de tabelas
+--
+
+--
+-- Limitadores para a tabela `noticias`
+--
+ALTER TABLE `noticias`
+  ADD CONSTRAINT `noticias_ibfk_1` FOREIGN KEY (`redator`) REFERENCES `redator` (`codRedator`),
+  ADD CONSTRAINT `noticias_ibfk_2` FOREIGN KEY (`categoria`) REFERENCES `categorias` (`idcategoria`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
