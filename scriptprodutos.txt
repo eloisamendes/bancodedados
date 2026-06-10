@@ -1,0 +1,710 @@
+Microsoft Windows [versão 10.0.26200.8524]
+(c) Microsoft Corporation. Todos os direitos reservados.
+
+C:\Users\eduar>cd C:\xampp\mysql\bin
+
+C:\xampp\mysql\bin> .\mysql -u root
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 63
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+5 rows in set (0.061 sec)
+
+MariaDB [(none)]> create database produto;
+Query OK, 1 row affected (0.051 sec)
+
+MariaDB [(none)]> use produto;
+Database changed
+MariaDB [produto]> CREATE TABLE categoria (
+    ->     idcategoria INT AUTO_INCREMENT PRIMARY KEY,
+    ->     categoria VARCHAR(100) NOT NULL,
+    ->     descricao VARCHAR(255) NOT NULL
+    -> );
+Query OK, 0 rows affected (0.262 sec)
+
+MariaDB [produto]> CREATE TABLE produto(
+    ->     idproduto INT AUTO_INCREMENT PRIMARY KEY,
+    ->     produto VARCHAR(200) NOT NULL,
+    ->     preco DECIMAL(10,2) NOT NULL,
+    ->     qtde INT NOT NULL,
+    ->     datacadastro DATE NOT NULL,
+    ->     ativo BIT NOT NULL,
+    ->     idcat INT,
+    ->     FOREIGN KEY (idcat) REFERENCES categoria(idcategoria)
+    -> );
+Query OK, 0 rows affected (0.057 sec)
+
+MariaDB [produto]> rename table produto to produtos;
+Query OK, 0 rows affected (0.078 sec)
+
+MariaDB [produto]> alter table produtos change datacadastro data date not null;
+Query OK, 0 rows affected (0.034 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [produto]> alter table categoria drop descricao;
+Query OK, 0 rows affected (0.034 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [produto]> describe categoria;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| idcategoria | int(11)      | NO   | PRI | NULL    | auto_increment |
+| categoria   | varchar(100) | NO   |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+2 rows in set (0.053 sec)
+
+MariaDB [produto]>  insert into categoria (categoria) values
+    ->  ('Enlatados'),('Laticínios'),('Açougue'),('Limpeza');
+Query OK, 4 rows affected (0.032 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [produto]> describe produtos;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| idproduto | int(11)       | NO   | PRI | NULL    | auto_increment |
+| produto   | varchar(200)  | NO   |     | NULL    |                |
+| preco     | decimal(10,2) | NO   |     | NULL    |                |
+| qtde      | int(11)       | NO   |     | NULL    |                |
+| data      | date          | NO   |     | NULL    |                |
+| ativo     | bit(1)        | NO   |     | NULL    |                |
+| idcat     | int(11)       | YES  | MUL | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+7 rows in set (0.049 sec)
+
+MariaDB [produto]> alter table produtos add observacao varchar(255) null;
+Query OK, 0 rows affected (0.040 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [produto]> describe produtos;
++------------+---------------+------+-----+---------+----------------+
+| Field      | Type          | Null | Key | Default | Extra          |
++------------+---------------+------+-----+---------+----------------+
+| idproduto  | int(11)       | NO   | PRI | NULL    | auto_increment |
+| produto    | varchar(200)  | NO   |     | NULL    |                |
+| preco      | decimal(10,2) | NO   |     | NULL    |                |
+| qtde       | int(11)       | NO   |     | NULL    |                |
+| data       | date          | NO   |     | NULL    |                |
+| ativo      | bit(1)        | NO   |     | NULL    |                |
+| idcat      | int(11)       | YES  | MUL | NULL    |                |
+| observacao | varchar(255)  | YES  |     | NULL    |                |
++------------+---------------+------+-----+---------+----------------+
+8 rows in set (0.057 sec)
+
+MariaDB [produto]> insert into produtos(produto,preco,qtde,data,ativo,idcat,observacao) values
+    ->  ('Acém Peça', 39.99,50,'2026-05-13',1,3,'Sem gordura');
+Query OK, 1 row affected (0.050 sec)
+
+MariaDB [produto]>  insert into produtos(produto,preco,qtde,data,ativo,idcat,observacao) values
+    -> ('Milho', 5.99,30,'2026-08-27',1,1,'Milho Verde');
+Query OK, 1 row affected (0.057 sec)
+
+MariaDB [produto]> INSERT INTO categoria (idcategoria, categoria)
+    -> VALUES (5, 'Bebidas')
+    ->  VALUES (6, 'Beleza');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'VALUES (6, 'Beleza')' at line 3
+MariaDB [produto]> INSERT INTO categoria (categoria)
+    -> VALUES
+    -> ('Bebidas'),
+    -> ('Beleza');
+Query OK, 2 rows affected (0.087 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [produto]> describe categoria;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| idcategoria | int(11)      | NO   | PRI | NULL    | auto_increment |
+| categoria   | varchar(100) | NO   |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+2 rows in set (0.056 sec)
+
+MariaDB [produto]> SELECT * FROM categoria;
++-------------+------------+
+| idcategoria | categoria  |
++-------------+------------+
+|           1 | Enlatados  |
+|           2 | Laticínios |
+|           3 | Açougue    |
+|           4 | Limpeza    |
+|           5 | Bebidas    |
+|           6 | Beleza     |
++-------------+------------+
+6 rows in set (0.040 sec)
+
+MariaDB [produto]> INSERT INTO categoria (categoria)
+    -> VALUES
+    -> ('Padaria'),
+    -> ('Hortifruti');
+Query OK, 2 rows affected (0.009 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [produto]> select * from categoria;
++-------------+------------+
+| idcategoria | categoria  |
++-------------+------------+
+|           1 | Enlatados  |
+|           2 | Laticínios |
+|           3 | Açougue    |
+|           4 | Limpeza    |
+|           5 | Bebidas    |
+|           6 | Beleza     |
+|           7 | Padaria    |
+|           8 | Hortifruti |
++-------------+------------+
+8 rows in set (0.001 sec)
+
+MariaDB [produto]> INSERT INTO produtos(produto,preco,qtde,data,ativo,idcat,observacao)
+    -> VALUES
+    -> ('Leite Integral', 6.49, 40, '2026-06-01', 1, 2, 'Caixa 1L'),
+    -> ('Queijo Mussarela', 34.90, 20, '2026-06-02', 1, 2, 'Peça fatiada'),
+    -> ('Refrigerante Cola', 8.99, 60, '2026-06-03', 1, 5, 'Garrafa 2L'),
+    -> ('Água Mineral', 2.50, 100, '2026-06-03', 1, 5, 'Sem gás'),
+    -> ('Shampoo', 15.99, 25, '2026-06-04', 1, 6, 'Cabelos normais'),
+    -> ('Condicionador', 17.99, 20, '2026-06-04', 1, 6, 'Hidratação'),
+    -> ('Sabão em Pó', 22.50, 30, '2026-06-05', 1, 4, 'Pacote 2kg'),
+    -> ('Detergente', 3.29, 80, '2026-06-05', 1, 4, 'Neutro'),
+    -> ('Pão Francês', 14.99, 15, '2026-06-06', 1, 7, 'Preço por kg'),
+    -> ('Bolo de Chocolate', 24.90, 10, '2026-06-06', 1, 7, 'Produção própria'),
+    -> ('Maçã Gala', 8.99, 50, '2026-06-07', 1, 8, 'Preço por kg'),
+    -> ('Banana Nanica', 5.49, 70, '2026-06-07', 1, 8, 'Preço por kg'),
+    -> ('Ervilha', 4.99, 35, '2026-06-08', 1, 1, 'Lata 200g'),
+    -> ('Atum', 9.90, 25, '2026-06-08', 1, 1, 'Lata em óleo'),
+    -> ('Contra Filé', 54.90, 18, '2026-06-09', 1, 3, 'Corte bovino');
+Query OK, 15 rows affected (0.008 sec)
+Records: 15  Duplicates: 0  Warnings: 0
+
+MariaDB [produto]> select * from produtos;
++-----------+-------------------+-------+------+------------+-------+-------+------------------+
+| idproduto | produto           | preco | qtde | data       | ativo | idcat | observacao       |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+
+|         1 | Acém Peça         | 39.99 |   50 | 2026-05-13 |      |     3 | Sem gordura      |
+|         2 | Milho             |  5.99 |   30 | 2026-08-27 |      |     1 | Milho Verde      |
+|         3 | Leite Integral    |  6.49 |   40 | 2026-06-01 |      |     2 | Caixa 1L         |
+|         4 | Queijo Mussarela  | 34.90 |   20 | 2026-06-02 |      |     2 | Peça fatiada     |
+|         5 | Refrigerante Cola |  8.99 |   60 | 2026-06-03 |      |     5 | Garrafa 2L       |
+|         6 | Água Mineral      |  2.50 |  100 | 2026-06-03 |      |     5 | Sem gás          |
+|         7 | Shampoo           | 15.99 |   25 | 2026-06-04 |      |     6 | Cabelos normais  |
+|         8 | Condicionador     | 17.99 |   20 | 2026-06-04 |      |     6 | Hidratação       |
+|         9 | Sabão em Pó       | 22.50 |   30 | 2026-06-05 |      |     4 | Pacote 2kg       |
+|        10 | Detergente        |  3.29 |   80 | 2026-06-05 |      |     4 | Neutro           |
+|        11 | Pão Francês       | 14.99 |   15 | 2026-06-06 |      |     7 | Preço por kg     |
+|        12 | Bolo de Chocolate | 24.90 |   10 | 2026-06-06 |      |     7 | Produção própria |
+|        13 | Maçã Gala         |  8.99 |   50 | 2026-06-07 |      |     8 | Preço por kg     |
+|        14 | Banana Nanica     |  5.49 |   70 | 2026-06-07 |      |     8 | Preço por kg     |
+|        15 | Ervilha           |  4.99 |   35 | 2026-06-08 |      |     1 | Lata 200g        |
+|        16 | Atum              |  9.90 |   25 | 2026-06-08 |      |     1 | Lata em óleo     |
+|        17 | Contra Filé       | 54.90 |   18 | 2026-06-09 |      |     3 | Corte bovino     |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+
+17 rows in set (0.005 sec)
+
+MariaDB [produto]> ALTER TABLE produtos
+    -> ADD marca VARCHAR(100) NULL;
+Query OK, 0 rows affected (0.037 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [produto]> DESCRIBE produtos;
++------------+---------------+------+-----+---------+----------------+
+| Field      | Type          | Null | Key | Default | Extra          |
++------------+---------------+------+-----+---------+----------------+
+| idproduto  | int(11)       | NO   | PRI | NULL    | auto_increment |
+| produto    | varchar(200)  | NO   |     | NULL    |                |
+| preco      | decimal(10,2) | NO   |     | NULL    |                |
+| qtde       | int(11)       | NO   |     | NULL    |                |
+| data       | date          | NO   |     | NULL    |                |
+| ativo      | bit(1)        | NO   |     | NULL    |                |
+| idcat      | int(11)       | YES  | MUL | NULL    |                |
+| observacao | varchar(255)  | YES  |     | NULL    |                |
+| marca      | varchar(100)  | YES  |     | NULL    |                |
++------------+---------------+------+-----+---------+----------------+
+9 rows in set (0.033 sec)
+
+MariaDB [produto]> select * from produtos;
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-------+
+| idproduto | produto           | preco | qtde | data       | ativo | idcat | observacao       | marca |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-------+
+|         1 | Acém Peça         | 39.99 |   50 | 2026-05-13 |      |     3 | Sem gordura      | NULL  |
+|         2 | Milho             |  5.99 |   30 | 2026-08-27 |      |     1 | Milho Verde      | NULL  |
+|         3 | Leite Integral    |  6.49 |   40 | 2026-06-01 |      |     2 | Caixa 1L         | NULL  |
+|         4 | Queijo Mussarela  | 34.90 |   20 | 2026-06-02 |      |     2 | Peça fatiada     | NULL  |
+|         5 | Refrigerante Cola |  8.99 |   60 | 2026-06-03 |      |     5 | Garrafa 2L       | NULL  |
+|         6 | Água Mineral      |  2.50 |  100 | 2026-06-03 |      |     5 | Sem gás          | NULL  |
+|         7 | Shampoo           | 15.99 |   25 | 2026-06-04 |      |     6 | Cabelos normais  | NULL  |
+|         8 | Condicionador     | 17.99 |   20 | 2026-06-04 |      |     6 | Hidratação       | NULL  |
+|         9 | Sabão em Pó       | 22.50 |   30 | 2026-06-05 |      |     4 | Pacote 2kg       | NULL  |
+|        10 | Detergente        |  3.29 |   80 | 2026-06-05 |      |     4 | Neutro           | NULL  |
+|        11 | Pão Francês       | 14.99 |   15 | 2026-06-06 |      |     7 | Preço por kg     | NULL  |
+|        12 | Bolo de Chocolate | 24.90 |   10 | 2026-06-06 |      |     7 | Produção própria | NULL  |
+|        13 | Maçã Gala         |  8.99 |   50 | 2026-06-07 |      |     8 | Preço por kg     | NULL  |
+|        14 | Banana Nanica     |  5.49 |   70 | 2026-06-07 |      |     8 | Preço por kg     | NULL  |
+|        15 | Ervilha           |  4.99 |   35 | 2026-06-08 |      |     1 | Lata 200g        | NULL  |
+|        16 | Atum              |  9.90 |   25 | 2026-06-08 |      |     1 | Lata em óleo     | NULL  |
+|        17 | Contra Filé       | 54.90 |   18 | 2026-06-09 |      |     3 | Corte bovino     | NULL  |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-------+
+17 rows in set (0.004 sec)
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Friboi' WHERE produto = 'Acém Peça';
+Query OK, 1 row affected (0.011 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Quero' WHERE produto = 'Milho';
+Query OK, 1 row affected (0.008 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Piracanjuba' WHERE produto = 'Leite Integral';
+Query OK, 1 row affected (0.002 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Tirolez' WHERE produto = 'Queijo Mussarela';
+Query OK, 1 row affected (0.004 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Coca-Cola' WHERE produto = 'Refrigerante Cola';
+Query OK, 1 row affected (0.003 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Crystal' WHERE produto = 'Água Mineral';
+Query OK, 1 row affected (0.003 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Pantene' WHERE produto = 'Shampoo';
+Query OK, 1 row affected (0.009 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Pantene' WHERE produto = 'Condicionador';
+Query OK, 1 row affected (0.007 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'OMO' WHERE produto = 'Sabão em Pó';
+Query OK, 1 row affected (0.007 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Ypê' WHERE produto = 'Detergente';
+Query OK, 1 row affected (0.134 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> select * from produtos;
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-------------+
+| idproduto | produto           | preco | qtde | data       | ativo | idcat | observacao       | marca       |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-------------+
+|         1 | Acém Peça         | 39.99 |   50 | 2026-05-13 |      |     3 | Sem gordura      | Friboi      |
+|         2 | Milho             |  5.99 |   30 | 2026-08-27 |      |     1 | Milho Verde      | Quero       |
+|         3 | Leite Integral    |  6.49 |   40 | 2026-06-01 |      |     2 | Caixa 1L         | Piracanjuba |
+|         4 | Queijo Mussarela  | 34.90 |   20 | 2026-06-02 |      |     2 | Peça fatiada     | Tirolez     |
+|         5 | Refrigerante Cola |  8.99 |   60 | 2026-06-03 |      |     5 | Garrafa 2L       | Coca-Cola   |
+|         6 | Água Mineral      |  2.50 |  100 | 2026-06-03 |      |     5 | Sem gás          | Crystal     |
+|         7 | Shampoo           | 15.99 |   25 | 2026-06-04 |      |     6 | Cabelos normais  | Pantene     |
+|         8 | Condicionador     | 17.99 |   20 | 2026-06-04 |      |     6 | Hidratação       | Pantene     |
+|         9 | Sabão em Pó       | 22.50 |   30 | 2026-06-05 |      |     4 | Pacote 2kg       | OMO         |
+|        10 | Detergente        |  3.29 |   80 | 2026-06-05 |      |     4 | Neutro           | Ypê         |
+|        11 | Pão Francês       | 14.99 |   15 | 2026-06-06 |      |     7 | Preço por kg     | NULL        |
+|        12 | Bolo de Chocolate | 24.90 |   10 | 2026-06-06 |      |     7 | Produção própria | NULL        |
+|        13 | Maçã Gala         |  8.99 |   50 | 2026-06-07 |      |     8 | Preço por kg     | NULL        |
+|        14 | Banana Nanica     |  5.49 |   70 | 2026-06-07 |      |     8 | Preço por kg     | NULL        |
+|        15 | Ervilha           |  4.99 |   35 | 2026-06-08 |      |     1 | Lata 200g        | NULL        |
+|        16 | Atum              |  9.90 |   25 | 2026-06-08 |      |     1 | Lata em óleo     | NULL        |
+|        17 | Contra Filé       | 54.90 |   18 | 2026-06-09 |      |     3 | Corte bovino     | NULL        |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-------------+
+17 rows in set (0.005 sec)
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Pullman' WHERE produto = 'Pão Francês';
+Query OK, 1 row affected (0.025 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Bauducco' WHERE produto = 'Bolo de Chocolate';
+Query OK, 1 row affected (0.017 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Turma da Mônica' WHERE produto = 'Maçã Gala';
+Query OK, 1 row affected (0.019 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Sítio Boa Vista' WHERE produto = 'Banana Nanica';
+Query OK, 1 row affected (0.013 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Quero' WHERE produto = 'Ervilha';
+Query OK, 1 row affected (0.016 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Gomes da Costa' WHERE produto = 'Atum';
+Query OK, 1 row affected (0.007 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> UPDATE produtos SET marca = 'Friboi' WHERE produto = 'Contra Filé';
+Query OK, 1 row affected (0.013 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [produto]> select * from produtos;
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-----------------+
+| idproduto | produto           | preco | qtde | data       | ativo | idcat | observacao       | marca           |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-----------------+
+|         1 | Acém Peça         | 39.99 |   50 | 2026-05-13 |      |     3 | Sem gordura      | Friboi          |
+|         2 | Milho             |  5.99 |   30 | 2026-08-27 |      |     1 | Milho Verde      | Quero           |
+|         3 | Leite Integral    |  6.49 |   40 | 2026-06-01 |      |     2 | Caixa 1L         | Piracanjuba     |
+|         4 | Queijo Mussarela  | 34.90 |   20 | 2026-06-02 |      |     2 | Peça fatiada     | Tirolez         |
+|         5 | Refrigerante Cola |  8.99 |   60 | 2026-06-03 |      |     5 | Garrafa 2L       | Coca-Cola       |
+|         6 | Água Mineral      |  2.50 |  100 | 2026-06-03 |      |     5 | Sem gás          | Crystal         |
+|         7 | Shampoo           | 15.99 |   25 | 2026-06-04 |      |     6 | Cabelos normais  | Pantene         |
+|         8 | Condicionador     | 17.99 |   20 | 2026-06-04 |      |     6 | Hidratação       | Pantene         |
+|         9 | Sabão em Pó       | 22.50 |   30 | 2026-06-05 |      |     4 | Pacote 2kg       | OMO             |
+|        10 | Detergente        |  3.29 |   80 | 2026-06-05 |      |     4 | Neutro           | Ypê             |
+|        11 | Pão Francês       | 14.99 |   15 | 2026-06-06 |      |     7 | Preço por kg     | Pullman         |
+|        12 | Bolo de Chocolate | 24.90 |   10 | 2026-06-06 |      |     7 | Produção própria | Bauducco        |
+|        13 | Maçã Gala         |  8.99 |   50 | 2026-06-07 |      |     8 | Preço por kg     | Turma da Mônica |
+|        14 | Banana Nanica     |  5.49 |   70 | 2026-06-07 |      |     8 | Preço por kg     | Sítio Boa Vista |
+|        15 | Ervilha           |  4.99 |   35 | 2026-06-08 |      |     1 | Lata 200g        | Quero           |
+|        16 | Atum              |  9.90 |   25 | 2026-06-08 |      |     1 | Lata em óleo     | Gomes da Costa  |
+|        17 | Contra Filé       | 54.90 |   18 | 2026-06-09 |      |     3 | Corte bovino     | Friboi          |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-----------------+
+17 rows in set (0.001 sec)
+
+MariaDB [produto]>  DELETE FROM produtos WHERE idproduto = 17;
+Query OK, 1 row affected (0.148 sec)
+
+MariaDB [produto]> select * from produtos;
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-----------------+
+| idproduto | produto           | preco | qtde | data       | ativo | idcat | observacao       | marca           |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-----------------+
+|         1 | Acém Peça         | 39.99 |   50 | 2026-05-13 |      |     3 | Sem gordura      | Friboi          |
+|         2 | Milho             |  5.99 |   30 | 2026-08-27 |      |     1 | Milho Verde      | Quero           |
+|         3 | Leite Integral    |  6.49 |   40 | 2026-06-01 |      |     2 | Caixa 1L         | Piracanjuba     |
+|         4 | Queijo Mussarela  | 34.90 |   20 | 2026-06-02 |      |     2 | Peça fatiada     | Tirolez         |
+|         5 | Refrigerante Cola |  8.99 |   60 | 2026-06-03 |      |     5 | Garrafa 2L       | Coca-Cola       |
+|         6 | Água Mineral      |  2.50 |  100 | 2026-06-03 |      |     5 | Sem gás          | Crystal         |
+|         7 | Shampoo           | 15.99 |   25 | 2026-06-04 |      |     6 | Cabelos normais  | Pantene         |
+|         8 | Condicionador     | 17.99 |   20 | 2026-06-04 |      |     6 | Hidratação       | Pantene         |
+|         9 | Sabão em Pó       | 22.50 |   30 | 2026-06-05 |      |     4 | Pacote 2kg       | OMO             |
+|        10 | Detergente        |  3.29 |   80 | 2026-06-05 |      |     4 | Neutro           | Ypê             |
+|        11 | Pão Francês       | 14.99 |   15 | 2026-06-06 |      |     7 | Preço por kg     | Pullman         |
+|        12 | Bolo de Chocolate | 24.90 |   10 | 2026-06-06 |      |     7 | Produção própria | Bauducco        |
+|        13 | Maçã Gala         |  8.99 |   50 | 2026-06-07 |      |     8 | Preço por kg     | Turma da Mônica |
+|        14 | Banana Nanica     |  5.49 |   70 | 2026-06-07 |      |     8 | Preço por kg     | Sítio Boa Vista |
+|        15 | Ervilha           |  4.99 |   35 | 2026-06-08 |      |     1 | Lata 200g        | Quero           |
+|        16 | Atum              |  9.90 |   25 | 2026-06-08 |      |     1 | Lata em óleo     | Gomes da Costa  |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-----------------+
+16 rows in set (0.014 sec)
+
+MariaDB [produto]> SELECT produto, preco FROM produtos;
++-------------------+-------+
+| produto           | preco |
++-------------------+-------+
+| Acém Peça         | 39.99 |
+| Milho             |  5.99 |
+| Leite Integral    |  6.49 |
+| Queijo Mussarela  | 34.90 |
+| Refrigerante Cola |  8.99 |
+| Água Mineral      |  2.50 |
+| Shampoo           | 15.99 |
+| Condicionador     | 17.99 |
+| Sabão em Pó       | 22.50 |
+| Detergente        |  3.29 |
+| Pão Francês       | 14.99 |
+| Bolo de Chocolate | 24.90 |
+| Maçã Gala         |  8.99 |
+| Banana Nanica     |  5.49 |
+| Ervilha           |  4.99 |
+| Atum              |  9.90 |
++-------------------+-------+
+16 rows in set (0.004 sec)
+
+MariaDB [produto]> SELECT * FROM produtos WHERE marca = 'Quero';
++-----------+---------+-------+------+------------+-------+-------+-------------+-------+
+| idproduto | produto | preco | qtde | data       | ativo | idcat | observacao  | marca |
++-----------+---------+-------+------+------------+-------+-------+-------------+-------+
+|         2 | Milho   |  5.99 |   30 | 2026-08-27 |      |     1 | Milho Verde | Quero |
+|        15 | Ervilha |  4.99 |   35 | 2026-06-08 |      |     1 | Lata 200g   | Quero |
++-----------+---------+-------+------+------------+-------+-------+-------------+-------+
+2 rows in set (0.025 sec)
+
+MariaDB [produto]> SELECT * FROM produtos WHERE marca = 'Pantene';
++-----------+---------------+-------+------+------------+-------+-------+-----------------+---------+
+| idproduto | produto       | preco | qtde | data       | ativo | idcat | observacao      | marca   |
++-----------+---------------+-------+------+------------+-------+-------+-----------------+---------+
+|         7 | Shampoo       | 15.99 |   25 | 2026-06-04 |      |     6 | Cabelos normais | Pantene |
+|         8 | Condicionador | 17.99 |   20 | 2026-06-04 |      |     6 | Hidratação      | Pantene |
++-----------+---------------+-------+------+------------+-------+-------+-----------------+---------+
+2 rows in set (0.001 sec)
+
+MariaDB [produto]> SELECT * FROM produtos WHERE preco > 14.99;
++-----------+-------------------+-------+------+------------+-------+-------+------------------+----------+
+| idproduto | produto           | preco | qtde | data       | ativo | idcat | observacao       | marca    |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+----------+
+|         1 | Acém Peça         | 39.99 |   50 | 2026-05-13 |      |     3 | Sem gordura      | Friboi   |
+|         4 | Queijo Mussarela  | 34.90 |   20 | 2026-06-02 |      |     2 | Peça fatiada     | Tirolez  |
+|         7 | Shampoo           | 15.99 |   25 | 2026-06-04 |      |     6 | Cabelos normais  | Pantene  |
+|         8 | Condicionador     | 17.99 |   20 | 2026-06-04 |      |     6 | Hidratação       | Pantene  |
+|         9 | Sabão em Pó       | 22.50 |   30 | 2026-06-05 |      |     4 | Pacote 2kg       | OMO      |
+|        12 | Bolo de Chocolate | 24.90 |   10 | 2026-06-06 |      |     7 | Produção própria | Bauducco |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+----------+
+6 rows in set (0.075 sec)
+
+MariaDB [produto]> SELECT * FROM produtos WHERE quant <= 60;
+ERROR 1054 (42S22): Unknown column 'quant' in 'where clause'
+MariaDB [produto]> SELECT * FROM produtos WHERE qtde <= 60;
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-----------------+
+| idproduto | produto           | preco | qtde | data       | ativo | idcat | observacao       | marca           |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-----------------+
+|         1 | Acém Peça         | 39.99 |   50 | 2026-05-13 |      |     3 | Sem gordura      | Friboi          |
+|         2 | Milho             |  5.99 |   30 | 2026-08-27 |      |     1 | Milho Verde      | Quero           |
+|         3 | Leite Integral    |  6.49 |   40 | 2026-06-01 |      |     2 | Caixa 1L         | Piracanjuba     |
+|         4 | Queijo Mussarela  | 34.90 |   20 | 2026-06-02 |      |     2 | Peça fatiada     | Tirolez         |
+|         5 | Refrigerante Cola |  8.99 |   60 | 2026-06-03 |      |     5 | Garrafa 2L       | Coca-Cola       |
+|         7 | Shampoo           | 15.99 |   25 | 2026-06-04 |      |     6 | Cabelos normais  | Pantene         |
+|         8 | Condicionador     | 17.99 |   20 | 2026-06-04 |      |     6 | Hidratação       | Pantene         |
+|         9 | Sabão em Pó       | 22.50 |   30 | 2026-06-05 |      |     4 | Pacote 2kg       | OMO             |
+|        11 | Pão Francês       | 14.99 |   15 | 2026-06-06 |      |     7 | Preço por kg     | Pullman         |
+|        12 | Bolo de Chocolate | 24.90 |   10 | 2026-06-06 |      |     7 | Produção própria | Bauducco        |
+|        13 | Maçã Gala         |  8.99 |   50 | 2026-06-07 |      |     8 | Preço por kg     | Turma da Mônica |
+|        15 | Ervilha           |  4.99 |   35 | 2026-06-08 |      |     1 | Lata 200g        | Quero           |
+|        16 | Atum              |  9.90 |   25 | 2026-06-08 |      |     1 | Lata em óleo     | Gomes da Costa  |
++-----------+-------------------+-------+------+------------+-------+-------+------------------+-----------------+
+13 rows in set (0.019 sec)
+
+MariaDB [produto]> SELECT produto, preco FROM produtos ORDER BY preco ASC LIMIT 5;
++---------------+-------+
+| produto       | preco |
++---------------+-------+
+| Água Mineral  |  2.50 |
+| Detergente    |  3.29 |
+| Ervilha       |  4.99 |
+| Banana Nanica |  5.49 |
+| Milho         |  5.99 |
++---------------+-------+
+5 rows in set (0.015 sec)
+
+MariaDB [produto]> SELECT produto, preco FROM produtos ORDER BY preco DESC LIMIT 5;
++-------------------+-------+
+| produto           | preco |
++-------------------+-------+
+| Acém Peça         | 39.99 |
+| Queijo Mussarela  | 34.90 |
+| Bolo de Chocolate | 24.90 |
+| Sabão em Pó       | 22.50 |
+| Condicionador     | 17.99 |
++-------------------+-------+
+5 rows in set (0.001 sec)
+
+MariaDB [produto]> SELECT COUNT(*) AS total_produtos FROM produtos;
++----------------+
+| total_produtos |
++----------------+
+|             16 |
++----------------+
+1 row in set (0.217 sec)
+
+MariaDB [produto]> SELECT AVG(preco) AS preco_medio FROM produtos;
++-------------+
+| preco_medio |
++-------------+
+|   14.243125 |
++-------------+
+1 row in set (0.003 sec)
+
+MariaDB [produto]> SELECT produto, qtde FROM produtos ORDER BY qtde DESC LIMIT 1;
++--------------+------+
+| produto      | qtde |
++--------------+------+
+| Água Mineral |  100 |
++--------------+------+
+1 row in set (0.005 sec)
+
+MariaDB [produto]> SELECT produto, qtde FROM produtos ORDER BY qtde DESC LIMIT 5;
++-------------------+------+
+| produto           | qtde |
++-------------------+------+
+| Água Mineral      |  100 |
+| Detergente        |   80 |
+| Banana Nanica     |   70 |
+| Refrigerante Cola |   60 |
+| Maçã Gala         |   50 |
++-------------------+------+
+5 rows in set (0.002 sec)
+
+MariaDB [produto]> SELECT p.produto, c.categoria FROM produtos p JOIN categoria c ON p.idcategoria = c.idcategoria;
+ERROR 1054 (42S22): Unknown column 'p.idcategoria' in 'on clause'
+MariaDB [produto]> SELECT p.produto, c.categoria FROM produtos p JOIN categoria c ON p.idcat = c.idcategoria;
++-------------------+------------+
+| produto           | categoria  |
++-------------------+------------+
+| Milho             | Enlatados  |
+| Ervilha           | Enlatados  |
+| Atum              | Enlatados  |
+| Leite Integral    | Laticínios |
+| Queijo Mussarela  | Laticínios |
+| Acém Peça         | Açougue    |
+| Sabão em Pó       | Limpeza    |
+| Detergente        | Limpeza    |
+| Refrigerante Cola | Bebidas    |
+| Água Mineral      | Bebidas    |
+| Shampoo           | Beleza     |
+| Condicionador     | Beleza     |
+| Pão Francês       | Padaria    |
+| Bolo de Chocolate | Padaria    |
+| Maçã Gala         | Hortifruti |
+| Banana Nanica     | Hortifruti |
++-------------------+------------+
+16 rows in set (0.083 sec)
+
+MariaDB [produto]> SELECT p.produto, p.marca, p.preco FROM produtos p JOIN categoria c ON p.idcat = c.idcategoria WHERE c.categoria = 'Laticínios';
++------------------+-------------+-------+
+| produto          | marca       | preco |
++------------------+-------------+-------+
+| Leite Integral   | Piracanjuba |  6.49 |
+| Queijo Mussarela | Tirolez     | 34.90 |
++------------------+-------------+-------+
+2 rows in set (0.110 sec)
+
+MariaDB [produto]> SELECT p.produto, p.marca, p.preco FROM produtos p JOIN categoria c ON p.idcat = c.idcategoria WHERE c.categoria = 'Beleza';
++---------------+---------+-------+
+| produto       | marca   | preco |
++---------------+---------+-------+
+| Shampoo       | Pantene | 15.99 |
+| Condicionador | Pantene | 17.99 |
++---------------+---------+-------+
+2 rows in set (0.002 sec)
+
+MariaDB [produto]> SELECT p.produto, p.marca, p.preco FROM produtos p JOIN categoria c ON p.idcat = c.idcategoria WHERE c.categoria = 'Padaria';
++-------------------+----------+-------+
+| produto           | marca    | preco |
++-------------------+----------+-------+
+| Pão Francês       | Pullman  | 14.99 |
+| Bolo de Chocolate | Bauducco | 24.90 |
++-------------------+----------+-------+
+2 rows in set (0.002 sec)
+
+MariaDB [produto]> SELECT p.produto, p.marca, p.preco FROM produtos p JOIN categoria c ON p.idcat = c.idcategoria WHERE c.categoria = 'Padaria0,';
+Empty set (0.004 sec)
+
+MariaDB [produto]> SELECT p.produto, p.marca, p.preco FROM produtos p JOIN categoria c ON p.idcat = c.idcategoria WHERE c.categoria = 'Limpeza';
++-------------+-------+-------+
+| produto     | marca | preco |
++-------------+-------+-------+
+| Sabão em Pó | OMO   | 22.50 |
+| Detergente  | Ypê   |  3.29 |
++-------------+-------+-------+
+2 rows in set (0.002 sec)
+
+MariaDB [produto]> SELECT c.categoria, COUNT(*) AS total_produtos FROM produtos p JOIN categoria c ON p.idcat = c.idcategoria GROUP BY c.categoria;
++------------+----------------+
+| categoria  | total_produtos |
++------------+----------------+
+| Açougue    |              1 |
+| Bebidas    |              2 |
+| Beleza     |              2 |
+| Enlatados  |              3 |
+| Hortifruti |              2 |
+| Laticínios |              2 |
+| Limpeza    |              2 |
+| Padaria    |              2 |
++------------+----------------+
+8 rows in set (0.116 sec)
+
+MariaDB [produto]> SELECT * FROM produtos
+    -> WHERE preco BETWEEN 10 AND 20;
++-----------+---------------+-------+------+------------+-------+-------+-----------------+---------+
+| idproduto | produto       | preco | qtde | data       | ativo | idcat | observacao      | marca   |
++-----------+---------------+-------+------+------------+-------+-------+-----------------+---------+
+|         7 | Shampoo       | 15.99 |   25 | 2026-06-04 |      |     6 | Cabelos normais | Pantene |
+|         8 | Condicionador | 17.99 |   20 | 2026-06-04 |      |     6 | Hidratação      | Pantene |
+|        11 | Pão Francês   | 14.99 |   15 | 2026-06-06 |      |     7 | Preço por kg    | Pullman |
++-----------+---------------+-------+------+------------+-------+-------+-----------------+---------+
+3 rows in set (0.011 sec)
+
+MariaDB [produto]> WHERE preco BETWEEN 5 AND 15;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE preco BETWEEN 5 AND 15' at line 1
+MariaDB [produto]> SELECT * FROM produtos
+    -> WHERE preco BETWEEN 5 AND 15;
++-----------+-------------------+-------+------+------------+-------+-------+--------------+-----------------+
+| idproduto | produto           | preco | qtde | data       | ativo | idcat | observacao   | marca           |
++-----------+-------------------+-------+------+------------+-------+-------+--------------+-----------------+
+|         2 | Milho             |  5.99 |   30 | 2026-08-27 |      |     1 | Milho Verde  | Quero           |
+|         3 | Leite Integral    |  6.49 |   40 | 2026-06-01 |      |     2 | Caixa 1L     | Piracanjuba     |
+|         5 | Refrigerante Cola |  8.99 |   60 | 2026-06-03 |      |     5 | Garrafa 2L   | Coca-Cola       |
+|        11 | Pão Francês       | 14.99 |   15 | 2026-06-06 |      |     7 | Preço por kg | Pullman         |
+|        13 | Maçã Gala         |  8.99 |   50 | 2026-06-07 |      |     8 | Preço por kg | Turma da Mônica |
+|        14 | Banana Nanica     |  5.49 |   70 | 2026-06-07 |      |     8 | Preço por kg | Sítio Boa Vista |
+|        16 | Atum              |  9.90 |   25 | 2026-06-08 |      |     1 | Lata em óleo | Gomes da Costa  |
++-----------+-------------------+-------+------+------------+-------+-------+--------------+-----------------+
+7 rows in set (0.001 sec)
+
+MariaDB [produto]> SELECT * FROM produtos
+    -> WHERE nome LIKE 'm%';
+ERROR 1054 (42S22): Unknown column 'nome' in 'where clause'
+MariaDB [produto]> SELECT * FROM produtos
+    -> WHERE produto LIKE 'm%';
++-----------+-----------+-------+------+------------+-------+-------+--------------+-----------------+
+| idproduto | produto   | preco | qtde | data       | ativo | idcat | observacao   | marca           |
++-----------+-----------+-------+------+------------+-------+-------+--------------+-----------------+
+|         2 | Milho     |  5.99 |   30 | 2026-08-27 |      |     1 | Milho Verde  | Quero           |
+|        13 | Maçã Gala |  8.99 |   50 | 2026-06-07 |      |     8 | Preço por kg | Turma da Mônica |
++-----------+-----------+-------+------+------------+-------+-------+--------------+-----------------+
+2 rows in set (0.047 sec)
+
+MariaDB [produto]> SELECT * FROM produtos
+    -> WHERE nome LIKE 'b%';
+ERROR 1054 (42S22): Unknown column 'nome' in 'where clause'
+MariaDB [produto]> SELECT * FROM produtos
+    -> WHERE produto LIKE 'e%';
++-----------+---------+-------+------+------------+-------+-------+------------+-------+
+| idproduto | produto | preco | qtde | data       | ativo | idcat | observacao | marca |
++-----------+---------+-------+------+------------+-------+-------+------------+-------+
+|        15 | Ervilha |  4.99 |   35 | 2026-06-08 |      |     1 | Lata 200g  | Quero |
++-----------+---------+-------+------+------------+-------+-------+------------+-------+
+1 row in set (0.001 sec)
+
+MariaDB [produto]> SELECT * FROM produtos
+    -> WHERE produto LIKE 'l%';
++-----------+----------------+-------+------+------------+-------+-------+------------+-------------+
+| idproduto | produto        | preco | qtde | data       | ativo | idcat | observacao | marca       |
++-----------+----------------+-------+------+------------+-------+-------+------------+-------------+
+|         3 | Leite Integral |  6.49 |   40 | 2026-06-01 |      |     2 | Caixa 1L   | Piracanjuba |
++-----------+----------------+-------+------+------------+-------+-------+------------+-------------+
+1 row in set (0.001 sec)
+
+MariaDB [produto]> SELECT * FROM produtos
+    -> WHERE produto LIKE 'd%';
++-----------+------------+-------+------+------------+-------+-------+------------+-------+
+| idproduto | produto    | preco | qtde | data       | ativo | idcat | observacao | marca |
++-----------+------------+-------+------+------------+-------+-------+------------+-------+
+|        10 | Detergente |  3.29 |   80 | 2026-06-05 |      |     4 | Neutro     | Ypê   |
++-----------+------------+-------+------+------------+-------+-------+------------+-------+
+1 row in set (0.002 sec)
+
+MariaDB [produto]> SELECT DISTINCT marca FROM produtos;
++-----------------+
+| marca           |
++-----------------+
+| Friboi          |
+| Quero           |
+| Piracanjuba     |
+| Tirolez         |
+| Coca-Cola       |
+| Crystal         |
+| Pantene         |
+| OMO             |
+| Ypê             |
+| Pullman         |
+| Bauducco        |
+| Turma da Mônica |
+| Sítio Boa Vista |
+| Gomes da Costa  |
++-----------------+
+14 rows in set (0.009 sec)
+
+MariaDB [produto]>
