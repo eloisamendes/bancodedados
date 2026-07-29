@@ -1,0 +1,62 @@
+create table cliente(
+    codcliente int PRIMARY KEY AUTO_INCREMENT,
+    cliente varchar(255) not null,
+    email varchar(100) UNIQUE not null,
+    cpf varchar(100) UNIQUE not null);
+   
+create table quarto(
+    codquarto int PRIMARY KEY AUTO_INCREMENT,
+    quarto varchar(255) not null,
+    andar varchar(100) UNIQUE not null,
+    tipo varchar(100) UNIQUE not null);
+   
+create table servico(
+    codservico int PRIMARY KEY AUTO_INCREMENT,
+    servico varchar(255) not null,
+    qtde int not null,
+    valor decimal(7,2) not null,
+    tipo varchar(50) not null);
+   
+create table hospedagem(
+    idhospedagem int PRIMARY KEY AUTO_INCREMENT,
+    dataentrada date not null,
+    datasaida date,
+    horaentrada time not null,
+    horasaida time,
+    totalhospedagem decimal(7,2),
+    codcli int,
+    codquarto int,
+    FOREIGN KEY (codcli) REFERENCES cliente(codcliente),
+    FOREIGN KEY (codquarto) REFERENCES quarto(codquarto));
+
+create table servicoshospedagem(
+    idhospedagem int,
+   	idservico int,
+    dataservico date,
+    horaservico time,
+    total decimal(7,2),
+    FOREIGN KEY (idhospedagem) REFERENCES hospedagem(idhospedagem),
+    FOREIGN KEY (idservico) REFERENCES servico(idservico));
+
+
+
+
+insert into cliente (cliente, cpf, email) VALUES
+('Emilly Jaquelini', '111.222.333-44', 'emmy@gmail.com'),
+('Mariane Campos', '111.222.553-44', 'mari334@gmail.com'),
+('Dalila Lyra', '111.542.333-44', 'dalila9090@gmail.com'),
+('Jade Picon', '141.222.393-44', 'jade000@gmail.com'),
+('Liana Garcia', '111.772.333-44', 'Lianaaa@gmail.com');
+
+insert into quarto (quarto, andar, tipo) VALUES
+('17', '1ºandar', 'Familia - 4 camas'),
+('22', '5ºandar', 'Familia - 7 camas'),
+('29', '5ºandar', 'Casal - 1 cama'),
+('8', '2ºandar', 'Familia - 3 camas'),
+('2', '1ºandar', 'Casal + 1 cama solteiro - 2 camas'),
+('12', '5ºandar', 'Casal duplo + solteiro- 3 camas casal'),
+('52', '9ºandar', 'Familia - 5 camas'),
+('10', '4ºandar', 'Suite preferencial - 1 cama'),
+('27', '6ºandar', 'Suite preferencial - 2 camas'),
+('56', '9ºandar', 'Suite preferencial - 3 camas');
+
